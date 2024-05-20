@@ -188,15 +188,19 @@ def loadBData(substrate,blockNumber):
         start = int(df.iloc[-1].iloc[0])+1
     
     for i in tqdm(range (start,blockNumber)):
-        
-        blockHash = substrate.get_block_hash(i)
-        era = (substrate.query(
-        "Staking", "ActiveEra",block_hash=blockHash
-        ))
-        # blockExtrinsic = substrate.get_extrinsics(block_number=i)
-        # ext = (blockExtrinsic[0]['call']['call_args'][0]['value'])
-        eraPoints = substrate.query("Staking","ErasRewardPoints",[int(str(era["index"]))],block_hash = str(blockHash))
-        data.append([i,blockHash,str(era["index"]),int(str(era['start'])),int(str(eraPoints['total']))])
+        try:
+            temp = i
+            blockHash = substrate.get_block_hash(i)
+            era = (substrate.query(
+            "Staking", "ActiveEra",block_hash=blockHash
+            ))
+            # blockExtrinsic = substrate.get_extrinsics(block_number=i)
+            # ext = (blockExtrinsic[0]['call']['call_args'][0]['value'])
+            eraPoints = substrate.query("Staking","ErasRewardPoints",[int(str(era["index"]))],block_hash = str(blockHash))
+            data.append([i,blockHash,str(era["index"]),int(str(era['start'])),int(str(eraPoints['total']))])
+        except:
+            i=temp-1
+            continue
             
     df = pd.DataFrame(data,columns=["BlockNumber","BlockHash","EraIndex","EraStart","EraPoints"])
     if not os.path.exists('blockHash.csv'):
