@@ -213,9 +213,9 @@ def main():
     substrate = createInstance()
     # header = substrate.get_block(block_number=208)
     # print(header)
-    for i in range (1,50):
-        loadBData(substrate,i*4300)
-        print("Data loaded for ", i*4300)
+    for i in range (120,200):
+        loadBData(substrate,i*5000)
+        print("Data loaded for ", i*5000)
         
     
 
